@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.kinzr.apellian"},{"l":"com.kinzr.apellian.configration"},{"l":"com.kinzr.apellian.controller"},{"l":"com.kinzr.apellian.entity.mapper"},{"l":"com.kinzr.apellian.entity.model"},{"l":"com.kinzr.apellian.entity.staging"},{"l":"com.kinzr.apellian.repository"}]
