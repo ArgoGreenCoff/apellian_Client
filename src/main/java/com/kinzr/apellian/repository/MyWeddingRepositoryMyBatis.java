@@ -18,8 +18,10 @@ import com.kinzr.apellian.entity.mapper.MyWedMapper;
 import com.kinzr.apellian.entity.mapper.MyWedAccessoryMapper;
 import com.kinzr.apellian.entity.mapper.MyWedCategoryMapper;
 import com.kinzr.apellian.entity.mapper.MyWedOptionMapper;
+import com.kinzr.apellian.entity.mapper.CdCategoryMapper;
 import com.kinzr.apellian.entity.mapper.CdCompanyMapper;
 import com.kinzr.apellian.entity.mapper.CdWeddingHallMapper;
+import com.kinzr.apellian.entity.model.CdCategory;
 import com.kinzr.apellian.entity.model.CdCompany;
 import com.kinzr.apellian.entity.model.CdWeddingHall;
 import com.kinzr.apellian.entity.model.MyWed;
@@ -45,7 +47,7 @@ public class MyWeddingRepositoryMyBatis implements MyWeddingRepository{
 	@Autowired private MyWedAccessoryMapper mywasryMapper;
 	@Autowired private CdCompanyMapper cdCmpyMapper;
 	@Autowired private CdWeddingHallMapper cdWedHallMapper;
-	
+	@Autowired private CdCategoryMapper cdCategoryMapper;
 	
 	@Override
 	public List<Users> selectAll() {
@@ -99,6 +101,26 @@ public class MyWeddingRepositoryMyBatis implements MyWeddingRepository{
 
 	@Override
 	@Transactional(isolation=Isolation.REPEATABLE_READ)
+	public void addMywedcategoryList(String idUser) {		
+
+		List<CdCategory> categoryList = cdCategoryMapper.selectAll();
+		MyWed myd = mywMapper.selectByIdUser(idUser);
+
+		if(myd != null) {
+			for(CdCategory cate : categoryList) {
+				MyWedCategory myCate = new MyWedCategory();
+				myCate.setCdCategory(cate.getCdCategory());
+				myCate.setNmCategory(cate.getNmCategory());
+				myCate.setIdWedding(myd.getIdWedding());
+				
+				mywctgMapper.insert(myCate);
+			}
+		}
+	}
+
+	
+	@Override
+	@Transactional(isolation=Isolation.REPEATABLE_READ)
 	public List<MyWedCategory> MywedcategoryList(long argmt) {		// 클래스 메인 리스트
 
 		long idWedding			= argmt; 
@@ -148,13 +170,14 @@ public class MyWeddingRepositoryMyBatis implements MyWeddingRepository{
 		Result result = new Result();
 		
 		String idUser			= request.getParameter("email");			// email
-		String nmPartner		= request.getParameter("nmPartner");		// 웨딩홀정보
-		String nmuser			= request.getParameter("nmuser");			// 신랑이름
+		String nmPartner		= (String) request.getAttribute("nmPartner");		// 배우자이름
+		String nmMan			= request.getParameter("nmMan");			// 신랑이름
+		String nmWoman			= request.getParameter("nmWoman");			// 신부이름
 		String stridWeddingHall	= request.getParameter("idWeddingHall");	// 웨딩홀정보Id
 		String nmWeddingHall	= request.getParameter("nmWeddingHall");	// 웨딩홀명
 
-		String dtweddate		= request.getParameter("weddate");	// 웨딩날짜		
-		String dtwedtime		= request.getParameter("wedtime");	// 웨딩시간
+		String dtweddate		= request.getParameter("wedDate");	// 웨딩날짜		
+		String dtwedtime		= request.getParameter("wedTime");	// 웨딩시간
 		
 	    if ((idUser == null)||(idUser.equals(""))) {
         	// 정규식 불일치
@@ -167,25 +190,25 @@ public class MyWeddingRepositoryMyBatis implements MyWeddingRepository{
 		
 
         // 약관동의 체크유무 체크
-        if ((nmPartner == null)||(nmPartner.equals(""))) {
+        if ((nmWoman == null)||(nmWoman.equals(""))) {
         	// 정규식 불일치
         	result.setCode("E41");
 			result.setDescription("신부이름을 입력해주세요.");
         	return result;        	
         }   
         
-	    System.out.println("E41 11 ----------- : " + idUser);
+	    System.out.println("E41 11 ----------- : " + nmWoman);
 
         
         // 약관동의 체크유무 체크
-        if ((nmuser == null)||(nmuser.equals(""))) {
+        if ((nmMan == null)||(nmMan.equals(""))) {
         	// 정규식 불일치
         	result.setCode("E42");
 			result.setDescription("신랑이름을 입력해주세요.");
         	return result;        	
         }        
         
-	    System.out.println("E42  ----------- : " + nmuser);
+	    System.out.println("E42  ----------- : " + nmMan);
 
                 
         // 약관동의 체크유무 체크
@@ -199,7 +222,7 @@ public class MyWeddingRepositoryMyBatis implements MyWeddingRepository{
         
         Integer idWeddingHall = 0; 
         // id 없어도 등록 가능
-        if (stridWeddingHall != null) {
+        if (stridWeddingHall != null && !stridWeddingHall.equals("")) {
         	idWeddingHall = Integer.valueOf(stridWeddingHall);		// 숫자처리
         }
         
@@ -272,43 +295,72 @@ public class MyWeddingRepositoryMyBatis implements MyWeddingRepository{
 		
 		if (myd != null) {
 			
-			System.out.println("myWed is ALREADY REG OK");
 			
-			result.setCode("E41");
-			result.setDescription("이미 마이웨딩에 등록된 고객입니다"); // 세션처리하거나 파라메터로 받으면 문제 없음
-			return result; 
-		}	
-	    
-		// 정상의 경우 등록처리
-
-		
-		MyWed InsMyWed = new MyWed(); //데이터 타입
-		
-		InsMyWed.setNmWeddingHall(nmWeddingHall); // 웨딩홀명
-		
-		InsMyWed.setIdUser(idUser); 
-		InsMyWed.setNmPartner(nmPartner); // nmPartner
-		InsMyWed.setIdWeddingHall(""+idWeddingHall); // 웨딩홀 팝업이 되면 등록 가능 
-		InsMyWed.setDtWedding(dtweddt);
-	    Date dt = new Date();
-	    InsMyWed.setDtReg(dt); 
-	    
-		irst = mywMapper.insert(InsMyWed);
-		
-		System.out.println("irst ----------- : " + irst);
-		
-		if (irst == 1) {
-			result.setCode("00");
-			result.setDescription("신규등록성공");
-			//result.setUserInfo(user);
-			return result;
+			MyWed InsMyWed = new MyWed(); //데이터 타입
+			
+			InsMyWed.setIdWedding(myd.getIdWedding());
+			InsMyWed.setNmWeddingHall(nmWeddingHall); // 웨딩홀명
+			
+			InsMyWed.setIdUser(idUser); 
+			InsMyWed.setNmPartner(nmPartner); // nmPartner
+			InsMyWed.setNmMan(nmMan);
+			InsMyWed.setNmWoman(nmWoman);
+			InsMyWed.setIdWeddingHall(""+idWeddingHall); // 웨딩홀 팝업이 되면 등록 가능 
+			InsMyWed.setDtWedding(dtweddt);
+			InsMyWed.setTmWedding(dtwedtime);
+		    Date dt = new Date();
+		    InsMyWed.setDtReg(dt); 
+		    
+			irst = mywMapper.updateByPrimaryKey(InsMyWed);
+			
+			System.out.println("irst ----------- : " + irst);
+			
+			if (irst == 1) {
+				result.setCode("00");
+				result.setDescription("업데이트 성공");
+				//result.setUserInfo(user);
+				return result;
+			}
+			else {
+				result.setCode("E41");
+				result.setDescription("등록처리 중 오류가 발생하였습니다.");
+				//result.setUserInfo(user);
+				return result;
+			}	
+		} else {
+			// 신규의 경우 등록처리
+			MyWed InsMyWed = new MyWed(); //데이터 타입
+			
+			InsMyWed.setNmWeddingHall(nmWeddingHall); // 웨딩홀명
+			
+			InsMyWed.setIdUser(idUser); 
+			InsMyWed.setNmPartner(nmPartner); // nmPartner
+			InsMyWed.setNmMan(nmMan);
+			InsMyWed.setNmWoman(nmWoman);
+			InsMyWed.setIdWeddingHall(""+idWeddingHall); // 웨딩홀 팝업이 되면 등록 가능 
+			InsMyWed.setDtWedding(dtweddt);
+			InsMyWed.setTmWedding(dtwedtime);
+		    Date dt = new Date();
+		    InsMyWed.setDtReg(dt); 
+		    
+			irst = mywMapper.insert(InsMyWed);
+			
+			System.out.println("irst ----------- : " + irst);
+			
+			if (irst == 1) {
+				result.setCode("00");
+				result.setDescription("신규등록성공");
+				//result.setUserInfo(user);
+				return result;
+			}
+			else {
+				result.setCode("E41");
+				result.setDescription("등록처리 중 오류가 발생하였습니다.");
+				//result.setUserInfo(user);
+				return result;
+			}	
 		}
-		else {
-			result.setCode("E41");
-			result.setDescription("등록처리 중 오류가 발생하였습니다.");
-			//result.setUserInfo(user);
-			return result;
-		}	
+	    
 		
 	}
 

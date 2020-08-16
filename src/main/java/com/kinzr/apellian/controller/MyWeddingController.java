@@ -220,13 +220,24 @@ public class MyWeddingController {
 		Result result = new Result();
 		result.setCode("NA");
 		String idUser = request.getParameter("email");
+		Users user = userRepo.GetUserInfo(idUser);
+
+		String nmWoman = request.getParameter("nmWoman");
+		String nmMan = request.getParameter("nmMan");
+		String nmPartner = "";
 		
-		String nmPartner = request.getParameter("nmPartner");
-		String nmuser = request.getParameter("nmuser");
+		if(user.getNmUser().equals(nmMan)) {
+			nmPartner = nmWoman;
+		} else {
+			nmPartner = nmMan;
+		}
+		request.setAttribute("nmPartner", nmPartner);
+
+		
 		String idWeddingHall = request.getParameter("idWeddingHall");
 		String nmWeddingHall = request.getParameter("nmWeddingHall");
-		String Weddate = request.getParameter("Weddate");
-		String wedtime = request.getParameter("wedtime");
+		String wedDate = request.getParameter("WedDate");
+		String wedTime = request.getParameter("wedTime");
 		
 		String NextPrc = request.getParameter("NextPrc");	// 처음 들어오면 조회여서 입력으로 넘어갸야 됨
 		
@@ -238,24 +249,22 @@ public class MyWeddingController {
 			request.setAttribute("email", idUser);
 			model.addAttribute("email", idUser);
 						
-			request.setAttribute("nmPartner", nmPartner);
-			request.setAttribute("nmuser", nmuser);
-			request.setAttribute("idWeddingHall", idWeddingHall);
-			request.setAttribute("nmWeddingHall", nmWeddingHall);
-			request.setAttribute("Weddate", Weddate);
-			request.setAttribute("wedtime", wedtime);
-
-			model.addAttribute("nmPartner", nmPartner);
-			model.addAttribute("nmuser", nmuser);
-			model.addAttribute("idWeddingHall", idWeddingHall);
-			model.addAttribute("nmWeddingHall", nmWeddingHall);
-			model.addAttribute("Weddate", Weddate);
-			model.addAttribute("wedtime", wedtime);
+			// MY_WED 테이블에서 정보 가져와서 edit.jsp에 넘겨주기
+			MyWed wed = myWedRepo.MyweddingList(idUser);
+			if(wed != null) {
+				model.addAttribute("nmMan", wed.getNmMan());
+				model.addAttribute("nmWoman", wed.getNmWoman());
+				model.addAttribute("idWeddingHall", wed.getIdWeddingHall());
+				model.addAttribute("nmWeddingHall", wed.getNmWeddingHall());
+				
+				Date from = wed.getDtWedding();
+				SimpleDateFormat transFormat = new SimpleDateFormat("yyyy.MM.dd");
+				String to = transFormat.format(from);
+				model.addAttribute("wedDate", to);
+				model.addAttribute("wedTime", wed.getTmWedding());
+			}
 			
 			model.addAttribute("NextPrc", "I");
-			model.addAttribute("NextPrc", "I");
-			
-			request.setAttribute("result", result);
 			model.addAttribute("result", result);
 			
 			
@@ -269,7 +278,9 @@ public class MyWeddingController {
 			// 등록처리 
 			result = myWedRepo.MywedEditCheck(request);
 			
-	
+			// Wedding 정보 입력된경우 MY_WED_CATEGORY 생성
+			myWedRepo.addMywedcategoryList(idUser);
+
 			System.out.println("idUser ------NEXT ----- : " + idUser);
 			
 			
@@ -294,28 +305,18 @@ public class MyWeddingController {
 				
 				System.out.println("idUser  fail ----- : " + idUser);
 				
-				request.setAttribute("email", idUser);
 				model.addAttribute("email", idUser);
 							
-				request.setAttribute("nmPartner", nmPartner);
-				request.setAttribute("nmuser", nmuser);
-				request.setAttribute("idWeddingHall", idWeddingHall);
-				request.setAttribute("nmWeddingHall", nmWeddingHall);
-				request.setAttribute("Weddate", Weddate);
-				request.setAttribute("wedtime", wedtime);
 	
 				model.addAttribute("nmPartner", nmPartner);
-				model.addAttribute("nmuser", nmuser);
+				model.addAttribute("nmMan", nmMan);
+				model.addAttribute("nmWoman", nmWoman);
 				model.addAttribute("idWeddingHall", idWeddingHall);
 				model.addAttribute("nmWeddingHall", nmWeddingHall);
-				model.addAttribute("Weddate", Weddate);
-				model.addAttribute("wedtime", wedtime);
+				model.addAttribute("wedDate", wedDate);
+				model.addAttribute("wedTime", wedTime);
 				
 				model.addAttribute("NextPrc", "I");
-				model.addAttribute("NextPrc", "I");
-				
-				
-				request.setAttribute("result", result);
 				model.addAttribute("result", result);
 				
 				

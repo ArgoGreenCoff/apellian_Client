@@ -56,7 +56,10 @@
       ID_REF = #{idRef,jdbcType=VARCHAR},
       ID_USER = #{idUser,jdbcType=VARCHAR},
       NM_PARTNER = #{nmPartner,jdbcType=VARCHAR},
+      NM_MAN = #{nmMan,jdbcType=VARCHAR},
+      NM_WOMAN = #{nmWoman,jdbcType=VARCHAR},
       DT_WEDDING = #{dtWedding,jdbcType=TIMESTAMP},
+      TM_WEDDING = #{tmWedding,jdbcType=VARCHAR},
       URL_CONTRACT = #{urlContract,jdbcType=VARCHAR},
       DT_REG = #{dtReg,jdbcType=TIMESTAMP}
     where ID_WEDDING = #{idWedding,jdbcType=BIGINT}
@@ -68,7 +71,7 @@
       This element was generated on Tue Apr 28 16:45:02 KST 2020.
     -->
     select ID_WEDDING, ID_WEDDING_HALL, NM_WEDDING_HALL, ID_REF, ID_USER, NM_PARTNER, 
-    DT_WEDDING, URL_CONTRACT, DT_REG
+    DT_WEDDING, URL_CONTRACT, DT_REG, NM_MAN, NM_WOMAN, TM_WEDDING
     from MY_WED
     where ID_WEDDING = #{idWedding,jdbcType=BIGINT}
   </select>
@@ -89,7 +92,7 @@
       This element was generated on Tue Apr 28 16:45:02 KST 2020.
     -->
     select ID_WEDDING, ID_WEDDING_HALL, NM_WEDDING_HALL, ID_REF, ID_USER, NM_PARTNER, 
-    DT_WEDDING, URL_CONTRACT, DT_REG
+    DT_WEDDING, URL_CONTRACT, DT_REG, NM_MAN, NM_WOMAN, TM_WEDDING
     from MY_WED
     where ID_USER = #{idUser,jdbcType=VARCHAR}
   </select>  

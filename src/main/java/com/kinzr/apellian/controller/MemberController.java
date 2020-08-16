@@ -384,6 +384,9 @@ public class MemberController {
 							
 							saveWeddingData(request);
 							
+							// 사용자 MY_WED_CATEGORY 기본값 추가
+							addWedCategory(request);
+							
 							
 							return "member/signin"; // 로그인창으로 리다이렉트
 							
@@ -445,6 +448,11 @@ public class MemberController {
 		return "member/signupOk"; // withdrawOk 
 		
 	} 
+	
+	public void addWedCategory(HttpServletRequest request) {
+		String idUser = request.getParameter("email");
+		myWedRepo.addMywedcategoryList(idUser);
+	}
 	
 	public void saveWeddingData(HttpServletRequest request) throws java.text.ParseException, ParseException {
 		

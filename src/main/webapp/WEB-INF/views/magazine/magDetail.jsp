@@ -92,16 +92,14 @@ function addBookmark() {
 	<header id="hd" class="v2">
 		<div class="container" style="display:block">
 			<div>
-				<a href="javascript:addBookmark();" class="" style="float: right; width:44px; height:44px">
 				
-					<c:if test="${isBookmark}">
-						<img src=${ iconBlack} id="iconBook" alt="" style="height: 40px;">
+ 					<c:if test="${isBookmark}">
+						<a href="javascript:addBookmark();" class="icon-bookmark blk check" style="float: right; width:26px; height:26px"></a>
 					</c:if>
 					<c:if test="${!isBookmark}">
-						<img src=${ iconWhite} id="iconBook" alt="" style="height: 40px;">
+						<a href="javascript:addBookmark();" class="icon-bookmark" style="float: right; width:26px; height:26px"></a>
 					</c:if>
 					
-				</a>
 			</div>
 		</div>
 	</header>

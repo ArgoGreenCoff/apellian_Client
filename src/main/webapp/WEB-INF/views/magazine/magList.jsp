@@ -101,7 +101,12 @@
                         <h3 class="font-serif" data-swiper-parallax="-300" style="transform: translate3d(0px, 0px, 0px);">${item.nmMagazine}</h3>
                         <p data-swiper-parallax="-200" style="transform: translate3d(0px, 0px, 0px);">${item.dsMagazine}</p>
                     </div>
-                    <a href="<c:url value='/magazine/magDetail?idMagazine=${item.idMagazine}&email=${email }' />" class="btn-blank"><span class="sr-only">자세히보기</span></a>
+                    <c:if test="${item.urlBlog != '' }"> 
+	                    <a href="javascript:magazineClick('${item.urlBlog }')" class="btn-blank"><span class="sr-only">자세히보기</span></a>
+                    </c:if>
+                    <c:if test="${item.urlBlog == '' }"> 
+	                    <a href="<c:url value='/magazine/magDetail?idMagazine=${item.idMagazine}&email=${email }' />" class="btn-blank"><span class="sr-only">자세히보기</span></a>
+                    </c:if>
                 </div>
             </div>
             </c:forEach>
@@ -141,6 +146,14 @@
 		freeMode: true,
 		spaceBetween: 8,
 	});    
+
+
+	function magazineClick(url) {
+
+		window.open(url, '_blank');
+		
+	}
+	
 </script>
 
 </body>

@@ -223,7 +223,7 @@ function goPage(url) {
 	</a>
 	</c:if>
 	<c:if test="${applyState == 4}">
-	<a href="#" class="btn btn-tit btn-primary btn-block">
+	<a class="btn btn-tit btn-primary btn-block">
 		모집종료
 	</a>
 	</c:if>

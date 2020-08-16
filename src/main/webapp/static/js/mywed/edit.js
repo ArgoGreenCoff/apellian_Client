@@ -61,7 +61,7 @@ function ClickValue(lst){
 	
 	wdDateText = yearmonth  + "." + lst +"";
 	
-	$('#weddate').val( wdDateText );
+	$('#wedDate').val( wdDateText );
 	
 	
 }

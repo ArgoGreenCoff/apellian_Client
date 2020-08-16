@@ -32,6 +32,8 @@ public interface MyWeddingRepository {
 	
 	int optionSum(long argmt); 
 	
+	public void addMywedcategoryList(String idUser);	
+
 	List<MyWedAccessory> mywedacrylist(long argmt);
 	
 	long categorySum(long argmt);
