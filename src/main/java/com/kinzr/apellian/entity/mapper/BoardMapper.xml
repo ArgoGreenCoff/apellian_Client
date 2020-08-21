@@ -77,7 +77,7 @@
     -->
     select ID_BOARD, TY_BOARD, YN_PUBLISH, ID_REG, DT_REG, NM_BOARD
     from BOARD
-    where TY_BOARD = #{type,jdbcType=VARCHAR}
+    where TY_BOARD = #{type,jdbcType=VARCHAR} and YN_PUBLISH = "Y"
   </select>
   
 </mapper>

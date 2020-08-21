@@ -64,7 +64,7 @@
 					<span class="badge badge-dark">예비부부</span>
 					</c:if>
 					<c:if test="${item.ynNewlyCouple == 'Y'}">
-					<span class="badge badge-outline-wh">신혼부부</span>
+					<span class="badge badge-dark">신혼부부</span>
 					</c:if>
 				</div>
 

@@ -441,7 +441,7 @@ public class BenefitController {
 		String name = request.getParameter("name");		
 		if(name != null && name != "") {
 			Result ret = userRepo.SetDelivery100(request);
-			if(ret.getCode().equals("00")) {
+			if(ret.getCode() == "00") {
 				model.addAttribute("result", "1");
 			} else {
 				model.addAttribute("result", "-1");

@@ -30,7 +30,7 @@
 	<!-- 페이지 시작 -->
 	<div class="container">
 	
-		<p class="text-muted small mt-2">정상 등록 되었습니다.!!</p>
+		<p class="text-muted small mt-2">정상 등록 되었습니다.</p>
 	
 	</div>
 	<div class="fixed-bottom-btn">			

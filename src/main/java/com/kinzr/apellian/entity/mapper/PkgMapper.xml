@@ -78,6 +78,7 @@
     select ID_PKG, CD_PKG_THEME, NM_PKG, AM_PRICE, AM_SALE_PRICE, CD_COMPANY, YN_PUBLISH, 
     DT_REG, DS_NOTICE
     from PKG
+    where YN_PUBLISH = 'Y' 
   </select>
   
   <select id="selectLimit5" resultMap="BaseResultMap">
@@ -95,6 +96,6 @@
       and B.YN_PUBLISH = 'Y'
       and B.YN_DELETE = 'N'
 	order by B.NO_ORDER asc
-    limit 0,5
+   <!-- limit 0,5 -->
 </select>
 </mapper>

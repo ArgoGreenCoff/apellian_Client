@@ -62,6 +62,7 @@
     -->
     select CD_PKG_THEME, NM_PKG_THEME, NO_ORDER, YN_PUBLISH
     from CD_PKG_THEME
+    where YN_PUBLISH = 'Y' and YN_DELETE = 'N'
   </select>
   <select id="selectFirstFive" resultMap="BaseResultMap">
     <!--
